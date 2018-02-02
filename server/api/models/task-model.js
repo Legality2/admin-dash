@@ -9,7 +9,14 @@ const taskModel = new Schema({
 	title: {type: String},
 	taskInstructions: {type: String, required: True},
 	scheduale:[],
-	completed: {type: Boolean},
+	created_date: {type:Date, default: Date.now},
+	status: { type:	
+		[{
+			type: String,
+			enum:['pending', 'ongoing', 'completed']
+		}],
+			default: ['pending']
+		}
 	taskCreator: {type: String, required: True},
 	contractor: {type: String}
 });
