@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var User = require('../models/user/user-model.js');
+var User = require('../models/user-model.js');
 var jwt = require('express-jwt');
-var config = require('../config/config.js');
+var config = require('../../config/config.js');
 var passport = require('passport');
-require('../config/passport.js');
+
 
 var auth = jwt({secret: config.secret, userProperty: 'payload'});
 
@@ -15,10 +15,10 @@ router.post('/signup', function(req, res) {
   var user = new User();
 
   user.username = req.body.username;
-  user.role = 'Admin';
 
   user.password = req.body.password
 
+  console.log(user);
   user.save(function(err) {
     var token;
     token = user.generateJWT();

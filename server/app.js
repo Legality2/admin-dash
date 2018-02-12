@@ -2,18 +2,31 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+const mongoose = require("mongoose");
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+const config = require("./config/config.js");
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 const nodemailer = require('nodemailer');
 
+//routes
+const AuthRoute = require("./api/routes/auth.js");
 
 //controllers
 const emailCtrl = require("./api/controllers/emailController.js");
+
+
+mongoose.connect(config.database, function(err){
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("Connected to admindb database");
+  }
+});
+
 
 const dataa = {
 	email: 'newmanp15@gmail.com',
@@ -49,6 +62,7 @@ app.use('/views', express.static(path.join(__dirname, '../client/app/public/view
 
 
 app.use('/users', users);
+app.use('/api/auth', AuthRoute);
 
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, '../client/app/index.html'));
