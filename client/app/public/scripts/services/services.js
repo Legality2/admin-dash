@@ -8,15 +8,15 @@
   return mySocket;
 });*/
 
-app.factory('auth', ['$http','$window', '$state', '$localStorage', function($http, $window, $state, $localStorage){
+app.factory('auth', ['$http','$window', '$state', '$localStorage', function($http, $window, $state, $localStorage) {
   var auth = {};
-
+  var storage = $localStorage;
     auth.saveToken = function(token){
-      $localStorage['here4reason'] = token;
+     storage.token = token;
     };
 
     auth.getToken = function(){
-      return $localStorage['here4reason'];
+      return storage.token;
     };
 
     auth.isLoggedIn = function(){
@@ -62,7 +62,7 @@ app.factory('auth', ['$http','$window', '$state', '$localStorage', function($htt
     };
 
     auth.logOut = function(){
-    delete $localStorage['here4reason'];
+    delete storage.token;
     $state.go('login');
   };
 
@@ -170,19 +170,4 @@ app.service('slideService', ['$resource', function($resource){
 
 
 
-app.factory('site', ['$http','$window', '$state', 'musicService', 'eventService', 'siteService', function($http, $window, $state, musicService, siteService, eventService){
-  var site = {};
-
-    site.siteInfo = function(){
-        siteService.query(function(data){
-            $scope.test = data
-            console.log($scope.test);
-          })
-        return $scope.test
-    };
-
-
-
-  return site
-}]);
 

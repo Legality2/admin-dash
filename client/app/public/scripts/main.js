@@ -103,9 +103,14 @@ $httpProvider.interceptors.push(['$q', '$location', '$window', '$localStorage', 
 }).run(function ($rootScope, $state, auth) {
     $rootScope.$on('$stateChangeStart', function (event, next, nextParam, fromState) {
       if(!auth.isLoggedIn()){
-        if (next.name !== 'login' && next.name !== 'register' && next.name){
+      	var noAuthroutes = ['login', 'register'];
+      	noAuthroutes.forEach(function(element) {
+		  console.log(element);
+	
+        if (next.name !== element ){
           event.preventDefault();
         }
+        });
       }
     });
   });
