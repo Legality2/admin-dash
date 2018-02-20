@@ -1,4 +1,4 @@
-var app = angular.module('adminApp', ['ui.router', 'ngStorage', 'ngResource', 'angular-jwt']);
+var app = angular.module('adminApp', ['ui.router', 'ngStorage', 'ngResource', 'angular-jwt', 'chart.js']);
 
 
 
@@ -10,8 +10,9 @@ $httpProvider.interceptors.push(['$q', '$location', '$window', '$localStorage', 
    return {
        'request': function (config) {
            config.headers = config.headers || {};
-           if ($localStorage['here4reason']) {
-               config.headers.Authorization = 'Bearer ' + $localStorage['here4reason'];
+           if ($localStorage.token) {
+               config.headers.Authorization = $localStorage.token;
+               console.log(config);
            }
            return config;
        },

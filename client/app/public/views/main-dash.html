@@ -9,7 +9,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" ng-show="isLoggedIn()" ng-click="logOut()">Sign out</a>
           <a class="dropdown-item" ng-hide="isLoggedIn()" ui-sref="login">Log In</a>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" ng-click="userInfo()">Something else here</a>
         </div>
       </li>
       </ul>

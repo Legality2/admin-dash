@@ -2,12 +2,11 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var User = require('../models/user-model.js');
-var jwt = require('express-jwt');
+var jwt = require('jsonwebtoken');
 var config = require('../../config/config.js');
 var passport = require('passport');
 
 
-var auth = jwt({secret: config.secret, userProperty: 'payload'});
 
 
 
@@ -59,37 +58,34 @@ if(!usr){
 })
 });
 
-router.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res) {
-  var token = getToken(req.headers);
-  if (token) {
-    var decoded = jwt.decode(token, config.secret);
-    User.findOne({
-      name: decoded.name
-    }, function(err, user) {
-        if (err) throw err;
- 
-        if (!user) {
-          return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
+router.get('/memberInfo', ensureAuthorized, function(req, res) {
+  User.findOne({token: req.token}, function(err, user) {
+        if (err) {
+            res.json({
+                type: false,
+                data: "Error occured: " + err
+            });
         } else {
-          res.json({success: true, msg: 'Welcome in the member area ' + user.name + '!'});
+            res.json({
+                type: true,
+                data: user
+            });
         }
     });
-  } else {
-    return res.status(403).send({success: false, msg: 'No token provided.'});
-  }
 });
  
-getToken = function (headers) {
-  if (headers && headers.authorization) {
-    var parted = headers.authorization.split(' ');
-    if (parted.length === 2) {
-      return parted[1];
+function ensureAuthorized(req, res, next) {
+    var bearerToken;
+    var bearerHeader = req.headers["authorization"];
+    if (typeof bearerHeader !== 'undefined') {
+        var bearer = bearerHeader.split(" ");
+        bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
     } else {
-      return null;
+        console.log(bearerToken);
+        res.send(403);
     }
-  } else {
-    return null;
-  }
-};
+}
 
 module.exports = router;

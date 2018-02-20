@@ -19,6 +19,13 @@ app.factory('auth', ['$http','$window', '$state', '$localStorage', function($htt
       return storage.token;
     };
 
+    auth.userInfo = function(){
+     $http.get('/api/auth/memberInfo').success(function(data){
+      console.log(data);
+      return data;    
+      });
+    };
+
     auth.isLoggedIn = function(){
       var token = auth.getToken();
 
