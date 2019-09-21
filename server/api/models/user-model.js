@@ -15,6 +15,7 @@ var UserSchema = new Schema({
         type: String,
         required: true
     },
+    token: String,
     role:  {
         type: String,
         enum : ['USER','Admin', 'msADMIN'],
@@ -53,13 +54,13 @@ UserSchema.methods.generateJWT = function(){
     var today = new Date();
     var exp = new Date(today);
     exp.setDate(today.getDate() + 60);
-
-    return jwt.sign({
+    this.token = jwt.sign({
       _id: this.id,
       username: this.username,
       role: this.role,
       exp: parseInt(exp.getTime() / 1000),
     }, config.secret);
+    return this.token;
 };
 
 module.exports = mongoose.model('User', UserSchema);

@@ -1,0 +1,90 @@
+
+   <div class="container-fluid">
+          <div class="row">
+          <!--first column -->
+            <div class="col-lg-4">
+                <div class="card text-white bg-dark cardStyle text-center">
+                  <div class="card-header">
+                   <i class="fab fa-algolia"></i> Tasks
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">task for Today</h5>
+                    <ul>
+                      <li>Social MediaPost- 9:45AM</li>
+                      <li>Developer Meeting- 4:00PM</li>
+                      <li>Social MediaPost- 2:45AM</li>
+                    </ul>
+                   
+                  </div>
+                  <div class="card-footer text-muted">
+                    2 days ago
+                  </div>
+                </div>
+            </div>
+            <!-- second column -->
+             <div class="col-lg-4">
+                <div class="card text-white bg-dark text-center cardStyle">
+                  <div class="card-header">
+                    Featured
+                  </div>
+                  <div class="card-body">
+                    <div ng-controller="AppCtrl" class="inset" ng-cloak style="height:300px; padding: 25px;">
+                        <div layout="row">
+
+                          <p>
+                            Toast can have multiple actions:
+                          </p>
+
+                          <md-button ng-click="showCustomToast()" class="md-raised" style="padding-left: 10px;padding-right: 10px;">
+                            Show Custom Toast
+                          </md-button>
+
+                        </div>
+                      </div>
+                  </div>
+                  <div class="card-footer text-muted">
+                    2 days ago
+                  </div>
+                </div>
+            </div>
+              <!-- third column -->
+             <div class="col-lg-4">
+                <div class="card text-white bg-dark text-center cardStyle">
+                  <div class="card-header">
+                    Featured
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                  
+                  </div>
+                  <div class="card-footer text-muted">
+                    2 days ago
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 class="h2">Dashboard</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group mr-2">
+                <button class="btn btn-sm btn-outline-secondary">Share</button>
+                <button class="btn btn-sm btn-outline-secondary">Export</button>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <span data-feather="calendar"></span>
+                This week
+              </button>
+            </div>
+          </div>
+<div class="container-fluid" ng-controller="bubbleCtrl">
+          <canvas id="line" class="chart chart-line" chart-data="data"
+chart-labels="labels" chart-series="series" chart-options="options"
+chart-dataset-override="datasetOverride" chart-click="onClick">
+</canvas
+</div>
+          <h2>Section title</h2>
+          <div class="table-responsive">
+            <div ng-include="'/components/table.html'"></div>
+          </div>

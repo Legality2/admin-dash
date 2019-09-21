@@ -1,18 +1,17 @@
-var app = angular.module('adminApp', ['ui.router', 'ngStorage', 'ngResource', 'angular-jwt', 'chart.js']);
+var app = angular.module('adminApp', ['ui.router', 'ngStorage', 'ngResource', 'angular-jwt']);
 
 
 
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
-    $urlRouterProvider.otherwise("/login");
+    $urlRouterProvider.otherwise("/home");
 
 $httpProvider.interceptors.push(['$q', '$location', '$window', '$localStorage', function($q, $location, $window, $localStorage) {
    return {
        'request': function (config) {
            config.headers = config.headers || {};
-           if ($localStorage.token) {
-               config.headers.Authorization = $localStorage.token;
-               console.log(config);
+           if ($localStorage['here4reason']) {
+               config.headers.Authorization = 'Bearer ' + $localStorage['here4reason'];
            }
            return config;
        },
@@ -31,15 +30,14 @@ $httpProvider.interceptors.push(['$q', '$location', '$window', '$localStorage', 
 
     $stateProvider
     .state("admin", {
-      abstract: true,
       url: '/admin',
       templateUrl: '/views/main-dash.html',
       controller: 'adminCtrl',
       data: {
         grantAccessTo: ['Admin']
       }
-    }).state("admin.task", {
-       url: '/task',
+    }).state("admin.task",{
+       url: '/music',
        templateUrl: '/views/dash-task.html',
        controller: 'adminCtrl',
        authenticate: true
@@ -88,7 +86,7 @@ $httpProvider.interceptors.push(['$q', '$location', '$window', '$localStorage', 
       controller: 'AuthCtrl',
       onEnter: ['$state', 'auth', function($state, auth){
         if(auth.isLoggedIn()){
-          $state.go('admin.task');
+          $state.go('admin.music');
         }
       }]
     }).state('register', {
@@ -97,21 +95,16 @@ $httpProvider.interceptors.push(['$q', '$location', '$window', '$localStorage', 
       controller: 'AuthCtrl',
       onEnter: ['$state', 'auth', function($state, auth){
         if(auth.isLoggedIn()){
-          $state.go('admin.task');
+          $state.go('admin.music');
         }
       }]
     });
 }).run(function ($rootScope, $state, auth) {
     $rootScope.$on('$stateChangeStart', function (event, next, nextParam, fromState) {
       if(!auth.isLoggedIn()){
-      	var noAuthroutes = ['login', 'register'];
-      	noAuthroutes.forEach(function(element) {
-		  console.log(element);
-	
-        if (next.name !== element ){
+        if (next.name !== 'login' && next.name !== 'register' && next.name !== 'home'  && next.name !== 'contactUs'  && next.name !== 'gallary'){
           event.preventDefault();
         }
-        });
       }
     });
   });

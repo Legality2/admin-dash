@@ -2,18 +2,34 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+const mongoose = require("mongoose");
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+const config = require("./config/config.js");
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 const nodemailer = require('nodemailer');
 
+//routes
+const AuthRoute = require("./api/routes/auth.js");
 
 //controllers
 const emailCtrl = require("./api/controllers/emailController.js");
+const taskCtrl = require("./api/controllers/taskController.js");
+
+//models
+const taskModel = require("./api/models/task-model.js");
+
+mongoose.connect(config.database, function(err){
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("Connected to admindb database");
+  }
+});
+
 
 const dataa = {
 	email: 'newmanp15@gmail.com',
@@ -34,6 +50,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+    next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/app', express.static(path.join(__dirname, '../client/app/')));
 app.use('/scripts', express.static(path.join(__dirname, '../client/app/public/scripts')));
@@ -49,6 +71,26 @@ app.use('/views', express.static(path.join(__dirname, '../client/app/public/view
 
 
 app.use('/users', users);
+app.use('/api/auth', AuthRoute);
+app.post('/task', function(req, res){
+	const newTask = new taskModel();
+		newTask.title = req.body.title;
+		newTask.taskInstructions = req.body.instructions;
+		newTask.schedule = req.body.schedule;
+		newTask.status = req.body.status;
+		newTask.taskCreator = req.body.creator;
+		newTask.contractor = req.body.contractor;
+
+		newTask.save(function(err, data){
+			if(err) console.log(err)
+
+			res.json(data);
+			console.log("new Taske was created by" + newTask.taskCreator);
+		});
+emailCtrl.emailLatestTodos();
+});
+
+;
 
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, '../client/app/index.html'));

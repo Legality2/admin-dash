@@ -7,17 +7,11 @@ const Schema = mongoose.Schema;
 
 const taskModel = new Schema({
 	title: {type: String},
-	taskInstructions: {type: String, required: True},
-	scheduale:[],
+	taskInstructions: {type: String},
+	schedule: String,
 	created_date: {type:Date, default: Date.now},
-	status: { type:	
-		[{
-			type: String,
-			enum:['pending', 'ongoing', 'completed']
-		}],
-			default: ['pending']
-		}
-	taskCreator: {type: String, required: True},
+	status: {type: String},
+	taskCreator: {type: String},
 	contractor: {type: String}
 });
 
